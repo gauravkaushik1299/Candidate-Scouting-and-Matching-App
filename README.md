@@ -23,8 +23,7 @@ This system:
 
 ## 🚀 Live Demo
 
-Frontend: https://catalyst-project-nu.vercel.app/
-Backend: https://catalyst-project-zwhi.onrender.com
+Frontend: https://candidate-scouting-and-matching-app.vercel.app/
 
 ---
 
