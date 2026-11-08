@@ -5,5 +5,7 @@ export function calculateFinalScore(matchScore, interestScore) {
 }
 
 export function rankCandidates(candidates) {
-  return candidates.sort((a, b) => b.finalScore - a.finalScore).slice(0, 10); // 🔥 ONLY TOP 10
+  return candidates
+    .sort((a, b) => Number(b.preferredFit) - Number(a.preferredFit) || b.finalScore - a.finalScore);
 }
+

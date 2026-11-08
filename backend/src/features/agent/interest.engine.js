@@ -12,8 +12,11 @@ export function calculateInterestScore(matchScore, candidate) {
     experienceEffect = +5; // juniors more eager
   }
 
-  // 🔹 Controlled randomness (less chaotic)
-  const randomness = Math.floor(Math.random() * 10); // small variation
+  // Stable simulated variation keeps repeated searches reproducible.
+  const identity = String(candidate.id ?? candidate.email ?? candidate.name ?? "profile");
+  let hash = 0;
+  for (const character of identity) hash = (hash * 31 + character.charCodeAt(0)) | 0;
+  const randomness = Math.abs(hash) % 10;
 
   let interestScore = baseInterest + experienceEffect + randomness;
 
@@ -36,3 +39,4 @@ export function calculateInterestScore(matchScore, candidate) {
     explanation,
   };
 }
+

@@ -1,12 +1,12 @@
-# 🤖 AI-Powered Talent Scouting & Engagement Agent
+# Candidate Scouting & Matching App
 
-An end-to-end AI agent that automates candidate discovery, evaluation, and ranking for recruiters.
+A recruiter-facing app for comparing job descriptions with a local pool of candidate profiles.
 
 ---
 
 ## 🎯 Problem
 
-Recruiters spend significant time manually screening candidates, evaluating skills, and estimating interest.
+Recruiters need a quick way to explore candidate profiles against the role, skills, and experience they are looking for.
 
 ---
 
@@ -14,10 +14,10 @@ Recruiters spend significant time manually screening candidates, evaluating skil
 
 This system:
 
-- Parses job descriptions
-- Matches candidates based on skills & experience
-- Simulates candidate interest
-- Generates a ranked shortlist with explanations
+- Accepts a job description written in natural language
+- Matches the role, skills, and experience against candidate profiles
+- Ranks exact fits ahead of potential matches
+- Shows match evidence and candidate details in an interactive shortlist
 
 ---
 
@@ -49,11 +49,14 @@ Backend: https://catalyst-project-zwhi.onrender.com
 
 ## 🔍 How It Works
 
-1. User inputs a job description
-2. System extracts required skills & experience
-3. Candidates are evaluated using scoring logic
-4. Weak matches are filtered out
-5. Top candidates are ranked and displayed
+1. A recruiter enters a job description in natural language
+2. The app recognizes supported role, skill, and experience phrases
+3. The backend compares the criteria with profiles in `backend/src/data/candidates.json`
+4. Exact fits rank first; relevant potential matches remain available when some criteria differ
+5. The shortlist displays 10 profiles per page, with additional matches available through pagination
+6. Each card shows match evidence on the front and the candidate profile on the back
+
+The current candidate pool contains 1,000 synthetic sample profiles. It is local demo data, not a live candidate feed.
 
 ---
 
@@ -61,59 +64,41 @@ Backend: https://catalyst-project-zwhi.onrender.com
 
 ### Match Score
 
-- Skill Match (70%)
-- Experience Match (30%)
-- Bonus for strong profiles
-- Capped at 100
+- Role and skill alignment contribute to the evidence score
+- Experience contributes up to 30% when the job description includes an experience requirement
+- Exact criteria fits rank ahead of potential matches
 
-### Interest Score
+### Ranking
 
-- Derived from match strength
-- Adds controlled randomness to simulate real-world behavior
-
-### Final Score
-
-```
-Final Score = 0.7 × Match Score + 0.3 × Interest Score
-```
+- A stable simulated interest factor contributes to ordering candidates with similar match scores
+- The same query and candidate data produce a repeatable shortlist
 
 ---
 
-## 🔎 Filtering Strategy
+## 🔎 Matching and Results
 
-To avoid noisy results:
-
-- Minimum skill match threshold applied
-- Minimum score threshold enforced
-- Top 10 candidates selected
-
----
-
-## 🧪 Sample Input
-
-```
-Looking for a backend developer with Node.js, MongoDB, Express, AWS, 3+ years experience
-```
+- Common role, technology, and experience phrases are recognized by a rule-based parser
+- Experience requirements such as “3+ years,” “less than two years,” and “more than 8 years” are supported
+- Near matches are retained and labeled as potential matches rather than being removed by a strict overall score cutoff
+- Skill coverage, role alignment, and experience are shown on the match-summary side of each card
+- Click a card to view the candidate’s name, email, title, company, location, experience, skills, bio, and availability
+- Use the page controls to browse all relevant results, 10 profiles at a time
+- A light/dark mode switch is available in the page header
 
 ---
 
-## 📊 Sample Output
+## 🧪 Sample Inputs
 
-```json
-[
-  {
-    "name": "Rahul Sharma",
-    "matchScore": 100,
-    "interestScore": 84,
-    "finalScore": 95
-  },
-  {
-    "name": "Anjali Mehta",
-    "matchScore": 65,
-    "interestScore": 76,
-    "finalScore": 68
-  }
-]
+```text
+Looking for a backend developer with Node.js, MongoDB, Express, AWS, and 3+ years of experience.
+```
+
+```text
+Looking for a full-stack engineer with less than two years of experience.
+```
+
+```text
+Looking for a DevOps engineer with Docker, AWS, Java, and SQL, with more than 8 years of experience.
 ```
 
 ---
@@ -127,6 +112,8 @@ cd backend
 npm install
 npm start
 ```
+
+Candidate data is loaded from the local `backend/src/data/candidates.json` file.
 
 ### Frontend
 
@@ -142,16 +129,11 @@ npm run dev
 
 - Frontend is deployed on Vercel
 - Backend is deployed on Render
-- API communication handled using environment variables
-
----
-
-## 🎥 Demo Video
-
-https://www.loom.com/share/bf0692d4b6c743d5835dd9d1336f7fc2
+- The frontend calls the backend URL configured in `VITE_API_URL` (or the production fallback in `frontend/src/pages/Home.jsx`)
 
 ---
 
 ## 👨‍💻 Author
 
 Gaurav Kaushik
+
