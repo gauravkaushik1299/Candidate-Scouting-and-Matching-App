@@ -87,7 +87,6 @@ function CandidateCard({ candidate, rank, requiredSkills = [], requiredExperienc
           <div className="candidate-card__topline">
             {rank === 1 && criteriaFit !== false && <span className="candidate-best">Top match</span>}
             {criteriaFit === false && <span className="candidate-potential">Potential match</span>}
-            <span className="flip-hint">View profile ↻</span>
           </div>
 
           <div className="candidate-match-heading">
@@ -154,6 +153,13 @@ function CandidateCard({ candidate, rank, requiredSkills = [], requiredExperienc
           aria-label={`${name} candidate details`}
           aria-hidden={!flipped}
           inert={!flipped}
+          tabIndex={flipped ? 0 : -1}
+          onKeyDown={(event) => {
+            if ((event.key === "Enter" || event.key === " ") && !event.target.closest("a, button")) {
+              event.preventDefault();
+              setFlipped(false);
+            }
+          }}
           onClick={(event) => {
             if (event.target.closest("a, button")) return;
             setFlipped(false);
@@ -166,7 +172,6 @@ function CandidateCard({ candidate, rank, requiredSkills = [], requiredExperienc
             <div className="candidate-identity__main">
               <h3>{name}</h3>
             </div>
-            <button className="flip-back-button" type="button" onClick={() => setFlipped(false)} aria-label="Return to match summary">↶</button>
           </div>
 
           <dl className="candidate-details">
@@ -190,7 +195,6 @@ function CandidateCard({ candidate, rank, requiredSkills = [], requiredExperienc
             <h4>Bio</h4>
             <p className="candidate-bio">{bio || "No bio provided."}</p>
           </div>
-          <button className="candidate-card__prompt candidate-card__prompt--back" type="button" onClick={() => setFlipped(false)}>Back to match summary</button>
         </section>
       </div>
     </article>
